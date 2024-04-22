@@ -1,23 +1,27 @@
 *{
-    /* background-color: black;
-    color: aliceblue; */
+    background-color:color-mix(in hsl shorter hue, color percentage, color percentage);
+    /* color:aqua; */
 }
 
 .header{
     min-height: 100vh;
+    height: 50;
     width: 100%;
-    position: relative;
+    position:relative;
+    display:block;
 }
 nav{
     display: flex;
-    padding: 2% 6%;
+    top:;
+    padding: 1% 6%;
     justify-content: space-between;
     align-items: center;
+    background-color: rgba(var(--bs-dark-rgb));
 }
 
 .nav-links{
     flex:1;
-    text-align: right;
+    text-align: left;
 }
 
 .nav-links ul li{
@@ -33,7 +37,16 @@ nav{
     font-size: xx-large;
     padding: 2% 2%;
     margin-left: 5px;
-    color: black;
+    color: rgba(153, 147, 147, 0.993);
+    transition: 0.2s;
+    border-radius: 10px;
+}
+
+.nav-links ul li a:hover{
+    color:burlywood;
+    /* background-color: black; */
+    border-radius: 10px;
+    /* padding: 5%; */
 }
 
 .text-box{
@@ -57,6 +70,33 @@ nav{
     margin-left: 5%;
 }
 
+.card-container{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    flex-direction: row;
+    display: none;
+}
+
+.card{
+    width: 150%;
+    height: 150%;
+}
+
+
+.form-check-input{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+}
+.form-check {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 #suggestions {
     display: none;
     position: absolute;
@@ -76,4 +116,17 @@ nav{
 #suggestions li:hover {
     background-color: #e5e5e5;
 }
-  
+
+.dog{
+    display:flex;
+    margin: 0%;
+    align-items: center;
+    justify-content: center;
+}
+.dog img{
+    flex-grow: 1;
+}
+
+/* input{
+    background-color: #f1f1f1;
+} */

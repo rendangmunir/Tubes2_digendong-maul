@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -25,12 +26,12 @@ type SearchResponse struct {
 
 func searchWikipedia(query string) ([]string, error) {
 	params := url.Values{}
-	params.Set("action", "query")
+	params.Set("action", "opensearch")
 	params.Set("format", "json")
-	params.Set("list", "search")
-	params.Set("srsearch", query)
+	params.Set("search", query)
 
 	url := baseURL + "?" + params.Encode()
+	fmt.Println(url)
 
 	resp, err := http.Get(url)
 	if err != nil {
@@ -38,17 +39,22 @@ func searchWikipedia(query string) ([]string, error) {
 	}
 	defer resp.Body.Close()
 
-	var searchRes SearchResponse
-	if err := json.NewDecoder(resp.Body).Decode(&searchRes); err != nil {
-		return nil, err
-	}
+	var searchRes []interface{}
+    if err := json.NewDecoder(resp.Body).Decode(&searchRes); err != nil {
+        return nil, err
+    }
 
-	titles := make([]string, len(searchRes.Query.Search))
-	for i, result := range searchRes.Query.Search {
-		titles[i] = result.Title
-	}
+	if len(searchRes) < 2 {
+        return nil, errors.New("invalid response format")
+    }
 
-	return titles, nil
+    titles := make([]string, len(searchRes[1].([]interface{})))
+    for i, title := range searchRes[1].([]interface{}) {
+        titles[i] = title.(string)
+    }
+
+    return titles, nil
+
 }
 
 func searchHandler(w http.ResponseWriter, r *http.Request) {
@@ -62,6 +68,32 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(titles)
 }
+
+func IDSHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
+	query := r.URL.Query().Get("q")
+	titles, err := searchWikipedia(query)
+	if err != nil {
+		http.Error(w, "Failed to search Wikipedia", http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(titles)
+}
+
+func BFSHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
+	query := r.URL.Query().Get("q")
+	titles, err := searchWikipedia(query)
+	if err != nil {
+		http.Error(w, "Failed to search Wikipedia", http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(titles)
+}
+
+
 
 func main() {
 	http.HandleFunc("/search", searchHandler)
