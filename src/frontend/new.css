@@ -144,8 +144,10 @@ input{
   background: #262a2f;
   background-color: #262a2f;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   flex-wrap: wrap;
-  align-items: flex-start;
+  /* align-items: flex-start; */
 }
 
 .result-box ul{
@@ -154,6 +156,15 @@ input{
   border-color: #262a2f;
   margin: 20px 20px 20px;
   border-radius: 6px;
+  min-width: 220px;
+}
+.result-box p{
+  padding: 15px 10px;
+  color: white;
+  border-color: #262a2f;
+  margin: 20px 20px 20px;
+  border-radius: 6px;
+  min-width: 220px;
 }
 
 .result-box ul li{

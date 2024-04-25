@@ -111,7 +111,7 @@ func searchWikipedia2(query string) ([]map[string]interface{}, error) {
 func suggestionHandler(w http.ResponseWriter, r *http.Request) {
 	enableCors(&w)
 	query := r.URL.Query().Get("q")
-	titles, err := searchWikipedia2(query)
+	titles, err := searchWikipedia(query)
 	if err != nil {
 		http.Error(w, "Failed to search Wikipedia", http.StatusInternalServerError)
 		return
@@ -121,12 +121,12 @@ func suggestionHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func IDSSearch(source string,dest string) ([]string, error){
-	dummyArray := []string{"result1", "result2", "result3"}
+	dummyArray := []string{source, dest}
 
   return dummyArray, nil
 }
 func BFSSearch(source string,dest string) ([]string, error){
-	dummyArray := []string{"result1", "result2", "result3"}
+	dummyArray := []string{source, dest}
 
   return dummyArray, nil
 }
