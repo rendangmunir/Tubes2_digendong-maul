@@ -59,32 +59,49 @@ func getLinks(aLink string) []string {
 	return linkContainer
 }
 
-
 // bool karena ada pengecekan
-// ptr ke jumlahArtikel karena bakan ngeupdate tiap iterasi
+// ptr ke jumlahArtikel karena akan ngeupdate tiap iterasi
 
-func IDS(target string, current string, jumlahArtikel *uint64, depth int) bool {
+func IDS(target string, current string, jumlahArtikel *uint64, maxDepth int) bool {
+	for i := 0; i <= maxDepth; i++ {
+		if DLS(target, current, i, jumlahArtikel) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func DLS(target string, current string, limit int, jumlahArtikel *uint64) bool {
-	
+
 	// url akhir ditemukan
-	if (target == current) {
+	if target == current {
 		return true
 	}
 
-	// limitnya sudah maksimal
-	if (limit <= 0) {
+	// limitnya sudah maksimal. berhenti
+	if limit <= 0 {
 		return false
 	}
 
+	// belum ditemukan, tapi belum mencapai limit
+	// buat array yang isinya children (semua link wikipedia yang ada di webpage tersebut)
+	// cek untuk setiap elemen array tersebut
+	children := getLinks(current)
+	for _, element := range children {
+		if DLS(target, element, limit-1, jumlahArtikel) == true {
+			return true
+		}
+	}
+
+	return false
 
 }
 
 func main() {
 	// URL awal dan akhir
 	url := "https://en.wikipedia.org/wiki/Lionel_Messi"
-	// target := "https://en.wikipedia.org/wiki/Joko_Widodo"
+	target := "https://en.wikipedia.org/wiki/Indonesia"
 
 	var childLinks []string = getLinks(url)
 	for _, element := range childLinks {
@@ -93,9 +110,21 @@ func main() {
 	fmt.Println(len(childLinks))
 
 	// jumlah artikel
-	var jumlahArtikel uint64 = 0
+	var jumlahArtikel uint64 = 0 // kembangin lagi
+
+	// panjang path
+	var panjangPath int = 0
 
 	// container path dari link awal sampai link akhir
 	path := make([]string, 0)
 	path = append(path, url)
+
+	for i := 0; i <= 6; i++ {
+		if IDS(target, url, &jumlahArtikel, i) == true {
+			fmt.Println("found")
+			panjangPath = i
+			fmt.Println("panjang path:", panjangPath)
+			break
+		}
+	}
 }
