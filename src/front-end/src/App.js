@@ -1,13 +1,17 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; 
 import './App.css';
-import Navbars from './components/Navbar';
-import SearchBox from './components/SearchBox';
+import Home from './components/Home';
+import About from './components/About';
 
 function App() {
   return (
-    <div className="justify-content-center mb-5">
-      <Navbars/>
-      <SearchBox/>
-    </  div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home/>}/>
+        <Route path="/about" element={<About/>}/>
+      </Routes>
+    </Router>
   );
 }
 

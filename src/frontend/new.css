@@ -1,0 +1,135 @@
+*{
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+}
+
+body{
+  background: #262a2f;
+  color: #333;
+}
+
+.header{
+  width: 100%;
+  position:relative;
+  display:block;
+}
+nav{
+  display: flex;
+  padding: 1% 1%;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(var(--bs-dark-rgb));
+}
+
+.nav-links{
+  flex:1;
+  text-align: left;
+}
+
+.nav-links ul li{
+  list-style: none;
+  display:inline-block;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.nav-links ul li a{
+  text-decoration: none;
+  font-size: 25px;
+  padding: 2% 2%;
+  margin-left: 5px;
+  color: rgba(153, 147, 147, 0.993);
+  transition: 0.2s;
+}
+
+.nav-links ul li a:hover{
+  color:burlywood;
+  /* background-color: black; */
+  border-radius: 10px;
+  /* padding: 5%; */
+}
+.title{
+  display: flex;
+  color: antiquewhite;
+  text-align: center;
+  justify-content: center;
+  margin-top: 50px;
+}
+.search-box{
+  justify-content: space-between;
+  display: flex;
+  align-items: flex-start;
+  max-height: 170px;
+}
+
+.source-box{
+  width: 400px;
+  background: white;
+  margin: 50px auto 50px;
+  border-radius: 5px;
+}
+
+.row{
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+input{
+  flex: 1;
+  height: 50px;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.suggestion-box{
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+.suggestion-box ul{
+  border-top: 1px solid #999;
+  padding: 15px 10px;
+}
+
+.suggestion-box ul li{
+  list-style: none;
+  border-radius: 3px;
+  padding: 15px 10px;
+  cursor: pointer;
+}
+
+.suggestion-box ul li:hover{
+  background:rgb(131, 140, 175) ;
+}
+
+.btn-box{
+  justify-content: center;
+  display: flex;
+  align-items: flex-start;
+  max-height: 170px;
+}
+
+.button{
+  position: relative;
+  padding: 10px 45px;
+  margin: 10px 10px;
+  border-radius: 6px;
+  background: white;
+  border: none;
+  transition: 0.3s;
+}
+.button:hover{
+  transform: scale(1.2);
+  transition: 0.3s;
+}
+
+.button:active{
+  transform: scale(01);
+}

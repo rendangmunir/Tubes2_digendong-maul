@@ -4,15 +4,17 @@
 }
 
 .header{
-    min-height: 100vh;
-    height: 50;
     width: 100%;
     position:relative;
     display:block;
 }
+body{
+    display: block;
+}
+
+
 nav{
     display: flex;
-    top:;
     padding: 1% 6%;
     justify-content: space-between;
     align-items: center;
@@ -51,16 +53,19 @@ nav{
 
 .text-box{
     width: 90%;
-    position: absolute;
+    position:relative;
+    /* padding: 10px;
+    margin-top: 20px; */
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
     text-align: center;
+    display: block;
 }
 
 .search-box{
     display: flex;
-    /* padding: 2% 6%; */
+    padding: 2% 6%;
     justify-content:center;
     align-items: center;
 }
@@ -76,7 +81,10 @@ nav{
     flex-wrap: wrap;
     gap: 20px;
     flex-direction: row;
-    display: none;
+    /* display: none; */
+}
+.main-container{
+    text-align: center;
 }
 
 .card{
@@ -118,13 +126,18 @@ nav{
 }
 
 .dog{
-    display:flex;
+    display:none;
     margin: 0%;
     align-items: center;
     justify-content: center;
 }
 .dog img{
     flex-grow: 1;
+}
+
+.result-details{
+    align-items: center;
+    text-align: center;
 }
 
 /* input{

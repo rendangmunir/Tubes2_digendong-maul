@@ -57,7 +57,7 @@ func searchWikipedia(query string) ([]string, error) {
 
 }
 
-func searchHandler(w http.ResponseWriter, r *http.Request) {
+func suggestionHandler(w http.ResponseWriter, r *http.Request) {
 	enableCors(&w)
 	query := r.URL.Query().Get("q")
 	titles, err := searchWikipedia(query)
@@ -69,16 +69,41 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(titles)
 }
 
-func IDSHandler(w http.ResponseWriter, r *http.Request) {
+func IDSSearch(source string,dest string) ([]string, error){
+	dummyArray := []string{"result1", "result2", "result3"}
+
+  return dummyArray, nil
+}
+func BFSSearch(source string,dest string) ([]string, error){
+	dummyArray := []string{"result1", "result2", "result3"}
+
+  return dummyArray, nil
+}
+
+func searchHandler(w http.ResponseWriter, r *http.Request) {
 	enableCors(&w)
-	query := r.URL.Query().Get("q")
-	titles, err := searchWikipedia(query)
+	mode := r.URL.Query().Get("mode")
+	sourceLink := r.URL.Query().Get("source")
+	destLink := r.URL.Query().Get("dest")
+	fmt.Println(mode)
+	fmt.Println(sourceLink)
+	fmt.Println(destLink)
+	var titles []string
+	var err error
+
+	if mode == "IDS" {
+			titles, err = IDSSearch(sourceLink, destLink)
+	} else {
+			titles, err = BFSSearch(sourceLink, destLink)
+	}
+
 	if err != nil {
-		http.Error(w, "Failed to search Wikipedia", http.StatusInternalServerError)
-		return
+			http.Error(w, "Failed to search Wikipedia", http.StatusInternalServerError)
+			return
 	}
 
 	json.NewEncoder(w).Encode(titles)
+
 }
 
 func BFSHandler(w http.ResponseWriter, r *http.Request) {
@@ -96,6 +121,7 @@ func BFSHandler(w http.ResponseWriter, r *http.Request) {
 
 
 func main() {
+	http.HandleFunc("/suggest", suggestionHandler)
 	http.HandleFunc("/search", searchHandler)
 	fmt.Println("Server running on port 8080")
 	http.ListenAndServe(":8080", nil)

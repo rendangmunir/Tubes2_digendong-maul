@@ -4,6 +4,7 @@
 }
 
 .header{
+  height: 50;
   width: 100%;
   position:relative;
   display:block;
@@ -50,7 +51,6 @@ nav{
 .about{
   justify-content: center;
   align-items: center;
-  text-align: center;
   position: relative;
   display: block;
 }

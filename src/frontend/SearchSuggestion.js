@@ -23,9 +23,9 @@ function displayResults(results) {
   
 
 class SearchSuggestions {
-    constructor() {
-      this.inputs = document.querySelectorAll('.form-control');
-      this.suggestionLists = document.querySelectorAll('.suggestions');
+    constructor(inputId, suggestionID) {
+      this.input = document.getElementById(inputId);
+      this.suggestion = document.getElementById(suggestionID);
       this.baseUrl = 'https://en.wikipedia.org/w/api.php';
       this.suggestions = [];
   
@@ -34,37 +34,33 @@ class SearchSuggestions {
   
     attachEvents() {
       console.log("HandlingEvent");
-      console.log(this.inputs);
-      this.inputs.forEach((input, index) => {
-        console.log(input);
-        input.addEventListener('input', (event) => {
-          this.handleInput(event, index);
-          console.log(event);
-        });
+      console.log(this.input);
+      this.input.addEventListener('input', (event) => {
+        this.handleInput(event);
+        console.log(event);
       });
   
       document.addEventListener('click', (event) => {
-        if (!event.target.closest('.suggestions')) {
+        if (!event.target.closest('.suggestion-box')) {
+          console.log(event.target.closest);
           this.hideAllSuggestions();
         }
       });
     }
   
-    handleInput(event, index) {
+    handleInput(event) {
       console.log("HandlingInput");
       const inputValue = event.target.value.toLowerCase();
-      const filteredSuggestions = this.suggestions.filter(suggestion =>
-      suggestion.toLowerCase().includes(inputValue)
-      );
+      // const filteredSuggestions = this.suggestions.filter(suggestion =>
+      // suggestion.toLowerCase().includes(inputValue)
+      // );
   
       // Fetch suggestions from Wikipedia API
 
-      // let url = this.baseUrl+inputValue;
-      // loadJSON(url, gotURL, 'jsonp');
-      fetch(`http://localhost:8080/search?q=${encodeURIComponent(inputValue)}`)
+      fetch(`http://localhost:8080/suggest?q=${encodeURIComponent(inputValue)}`)
         .then(response => response.json())
         .then(data => {
-          this.updateSuggestions(data, index);
+          this.updateSuggestions(data);
           console.log(data);
         })
         .catch(error => {
@@ -72,28 +68,32 @@ class SearchSuggestions {
         });
     }
   
-    updateSuggestions(filteredSuggestions, index) {
-      const suggestionList = this.suggestionLists[index];
-      suggestionList.innerHTML = '';
-  
+    updateSuggestions(filteredSuggestions) {
+
+      this.suggestion.innerHTML = '';
+      // const content = filteredSuggestions.map((list) =>{
+      //   return "<li>" + list +"</li>"
+      // });
+      // this.suggestion.innerHTML = "<ul>" + content.join('') + "</ul>";
+      const ul = document.createElement('ul');
       filteredSuggestions.forEach(suggestion => {
         const li = document.createElement('li');
         li.textContent = suggestion;
         li.addEventListener('click', () => {
-          this.inputs[index].value = suggestion;
+          this.input.value = suggestion;
           this.hideAllSuggestions();
         });
-        suggestionList.appendChild(li);
+        ul.appendChild(li);
       });
+      this.suggestion.appendChild(ul);
   
-      suggestionList.style.display = filteredSuggestions.length ? 'block' : 'none';
+      this.suggestion.style.display = filteredSuggestions.length ? 'block' : 'none';
     }
   
     hideAllSuggestions() {
-      this.suggestionLists.forEach(suggestionList => {
-        suggestionList.style.display = 'none';
-      });
+        this.suggestion.innerHTML = '';
     }
   }
   
-  new SearchSuggestions();
+  new SearchSuggestions("sourceLink","source-suggestion");
+  new SearchSuggestions("destLink","dest-suggestion");
