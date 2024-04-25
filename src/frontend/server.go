@@ -56,11 +56,62 @@ func searchWikipedia(query string) ([]string, error) {
     return titles, nil
 
 }
+func searchWikipedia2(query string) ([]map[string]interface{}, error) {
+	params := url.Values{}
+	params.Set("action", "opensearch")
+	params.Set("format", "json")
+	params.Set("prop", "pageimages|pageterms")
+	params.Set("generator", "search")
+	params.Set("piprop", "thumbnail")
+	params.Set("pithumbsize", "300")
+	params.Set("pilimit", "10")
+	params.Set("wbptterms", "description")
+	params.Set("gsrsearch", query)
+	params.Set("gsrlimit", "5")
+
+	resp, err := http.Get(baseURL + "?" + params.Encode())
+	if err != nil {
+			return nil, err
+	}
+	defer resp.Body.Close()
+
+	var searchRes map[string]interface{}
+	if err := json.NewDecoder(resp.Body).Decode(&searchRes); err != nil {
+			return nil, err
+	}
+
+	pages := searchRes["query"].(map[string]interface{})["pages"].(map[string]interface{})
+	searchResults := make([]map[string]interface{}, 0, len(pages))
+	for _, page := range pages {
+			pageData := page.(map[string]interface{})
+			title := pageData["title"].(string)
+			description := ""
+			if terms, ok := pageData["terms"].(map[string]interface{}); ok {
+					if desc, ok := terms["description"].([]interface{}); ok && len(desc) > 0 {
+							description = desc[0].(string)
+					}
+			}
+			thumbnailURL := ""
+			if thumbnail, ok := pageData["thumbnail"].(map[string]interface{}); ok {
+					thumbnailURL = thumbnail["source"].(string)
+			}
+			wikipediaURL := "https://en.wikipedia.org/wiki/" + url.PathEscape(title)
+
+			searchResults = append(searchResults, map[string]interface{}{
+					"title":       title,
+					"description": description,
+					"thumbnail":   thumbnailURL,
+					"wikipedia":   wikipediaURL,
+			})
+	}
+
+	return searchResults, nil
+}
 
 func suggestionHandler(w http.ResponseWriter, r *http.Request) {
 	enableCors(&w)
 	query := r.URL.Query().Get("q")
-	titles, err := searchWikipedia(query)
+	titles, err := searchWikipedia2(query)
 	if err != nil {
 		http.Error(w, "Failed to search Wikipedia", http.StatusInternalServerError)
 		return
@@ -85,9 +136,9 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 	mode := r.URL.Query().Get("mode")
 	sourceLink := r.URL.Query().Get("source")
 	destLink := r.URL.Query().Get("dest")
-	fmt.Println(mode)
 	fmt.Println(sourceLink)
 	fmt.Println(destLink)
+	fmt.Println(mode)
 	var titles []string
 	var err error
 

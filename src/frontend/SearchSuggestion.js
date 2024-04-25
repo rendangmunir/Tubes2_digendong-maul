@@ -42,7 +42,6 @@ class SearchSuggestions {
   
       document.addEventListener('click', (event) => {
         if (!event.target.closest('.suggestion-box')) {
-          console.log(event.target.closest);
           this.hideAllSuggestions();
         }
       });

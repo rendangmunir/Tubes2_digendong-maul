@@ -126,10 +126,52 @@ input{
   transition: 0.3s;
 }
 .button:hover{
-  transform: scale(1.2);
+  transform: scale(1.1);
   transition: 0.3s;
 }
 
 .button:active{
   transform: scale(01);
+}
+
+.button:disabled{
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.result-box{
+  justify-content: center;
+  background: #262a2f;
+  background-color: #262a2f;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.result-box ul{
+  padding: 15px 10px;
+  background-color: white;
+  border-color: #262a2f;
+  margin: 20px 20px 20px;
+  border-radius: 6px;
+}
+
+.result-box ul li{
+  list-style: none;
+  border-radius: 3px;
+  border: 1px solid #999;
+  padding: 15px 10px;
+  cursor: pointer;
+}
+.result-box ul li a{
+  list-style: none;
+  text-decoration: none;
+  color: #262a2f;
+  border-radius: 3px;
+  padding: 15px 10px;
+  cursor: pointer;
+}
+
+.result-box ul li:hover{
+  background:rgb(131, 140, 175) ;
 }
