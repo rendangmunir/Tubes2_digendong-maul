@@ -91,11 +91,14 @@ input{
 .suggestion-box{
   max-height: 300px;
   overflow-y: scroll;
+  position: relative;
+  z-index: 1;
 }
 
 .suggestion-box ul{
   border-top: 1px solid #999;
   padding: 15px 10px;
+  margin-bottom: 0;
 }
 
 .suggestion-box ul li{
