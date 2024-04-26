@@ -11,6 +11,11 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
+// fungsi untuk copy slice
+func copySlice(slice1 *[]string, slice2 *[]string) {
+
+}
+
 // fungsi untuk menghapus duplikat dari slice
 func removeDuplicate(arr *[]string) {
 	seen := make(map[string]bool)
@@ -100,8 +105,8 @@ func DLS(target string, current string, limit int, jumlahArtikel *uint64) bool {
 
 func main() {
 	// URL awal dan akhir
-	url := "https://en.wikipedia.org/wiki/Lionel_Messi"
-	target := "https://en.wikipedia.org/wiki/Indonesia"
+	url := "https://en.wikipedia.org/wiki/Joe_Biden"
+	target := "https://en.wikipedia.org/wiki/Joko_Widodo"
 
 	var childLinks []string = getLinks(url)
 	for _, element := range childLinks {
