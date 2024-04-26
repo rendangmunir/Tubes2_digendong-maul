@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	// "os"
 
@@ -105,8 +106,8 @@ func DLS(target string, current string, limit int, jumlahArtikel *uint64) bool {
 
 func main() {
 	// URL awal dan akhir
-	url := "https://en.wikipedia.org/wiki/Joe_Biden"
-	target := "https://en.wikipedia.org/wiki/Joko_Widodo"
+	url := "https://en.wikipedia.org/wiki/Hollywood%2C_Los_Angeles"
+	target := "https://en.wikipedia.org/wiki/Indonesia"
 
 	var childLinks []string = getLinks(url)
 	for _, element := range childLinks {
@@ -124,6 +125,9 @@ func main() {
 	path := make([]string, 0)
 	path = append(path, url)
 
+	// mulai timer
+	timerStart := time.Now()
+
 	for i := 0; i <= 6; i++ {
 		if IDS(target, url, &jumlahArtikel, i) == true {
 			fmt.Println("found")
@@ -132,4 +136,9 @@ func main() {
 			break
 		}
 	}
+
+	timerStop := time.Now()
+	programDuration := timerStop.Sub(timerStart)
+
+	fmt.Println("durasi algoritma IDS:", programDuration.Milliseconds(), "milisekon")
 }
