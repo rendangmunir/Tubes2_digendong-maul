@@ -10,11 +10,11 @@ function titleToUrl(title) {
   return `${baseUrl}${encodeURIComponent(sanitizedPageTitle)}`;
 }
 
-function updateResults(data, mode) {
+function updateResults(data, mode, time) {
   const result = document.getElementById('result');
   result.innerHTML = '';
   const ResultMsg = document.createElement('p');
-  ResultMsg.textContent = "Found Result using "+mode+" Algorithm with processing time"
+  ResultMsg.innerHTML = `Found Result using ${mode} Algorithm with processing time ${time} ms`
   result.appendChild(ResultMsg);
   const ul = document.createElement('ul');
     data.forEach(result => {
@@ -32,15 +32,25 @@ function updateResults(data, mode) {
 idsButton.addEventListener('click', () =>{
   const SourceLink = sourceInput.value;
   const DestLink = destInput.value;
+  bfsButton.setAttribute('disabled', 'disabled');
+  idsButton.setAttribute('disabled', 'disabled');
+  const start = performance.now();
+
   fetch(`http://localhost:8080/search?mode=BFS&source=${SourceLink}&dest=${DestLink}`)
   .then(response => response.json())
   .then(data => {
     console.log(data);
+    const endTime = performance.now();
+    const processingTime = Math.round(endTime-start);
 
-    updateResults(data, "IDS");
+    updateResults(data, "IDS", processingTime);
   })
   .catch( error =>{
     console.error('Error fetching results', error);
+  })
+  .finally(() =>{
+    bfsButton.removeAttribute('disabled');
+    idsButton.removeAttribute('disabled');
   });
 
   
@@ -48,15 +58,19 @@ idsButton.addEventListener('click', () =>{
   console.log(sourceInput.value);
   console.log(destInput.value);
 });
+
 bfsButton.addEventListener('click', () =>{
   const SourceLink = sourceInput.value;
   const DestLink = destInput.value;
   bfsButton.setAttribute('disabled', 'disabled');
   idsButton.setAttribute('disabled', 'disabled');
+  const start = performance.now();
   fetch(`http://localhost:8080/search?mode=IDS&source=${SourceLink}&dest=${DestLink}`)
   .then(response => response.json())
   .then(data => {
-    updateResults(data,"BFS");
+    const endTime = performance.now();
+    const processingTime = Math.round(endTime-start);
+    updateResults(data,"BFS", processingTime);
   })
   .catch( error =>{
     console.error('Error fetching results', error);
