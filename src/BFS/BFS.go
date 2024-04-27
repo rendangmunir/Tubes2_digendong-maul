@@ -12,15 +12,26 @@ import (
 )
 
 func main() {
-	var artAwal, artDest, temp1, temp2 string
-	var solusi [9]string
-	ter, i, j, k := 0, 0, 0, 0
+	var awal, akhir string
+	var solve []string
+	var err error
 
 	fmt.Print("Input Artikel Akhir: ")
-	fmt.Scanln(&artDest)
+	fmt.Scanln(&akhir)
 
 	fmt.Print("Input Artikel Mulai: ")
-	fmt.Scanln(&artAwal)
+	fmt.Scanln(&awal)
+
+	solve, err = BFS(awal, akhir)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Print(solve)
+}
+func BFS(artAwal string, artDest string) ([]string, error) {
+	var temp1, temp2 string
+	var solusi []string
+	ter, i, j, k := 0, 0, 0, 0
 
 	MapArt := scrape(artAwal)
 	MapArt2 := scrape(artAwal)
@@ -79,19 +90,20 @@ func main() {
 		}
 	}
 	temp1 = artDest
-	solusi[0] = artDest
+	solusi = append(solusi, artDest)
 	for ter = 1; ter < 9; ter++ {
 		temp2 = MapArt[temp1]
 
 		if temp2 == "" {
 			break
 		}
-		solusi[ter] = temp2
+		solusi = append(solusi, temp2)
 		temp1 = temp2
 	}
 	elapsed := time.Since(start)
 	fmt.Println("Elapsed time:", elapsed)
 	fmt.Println("Hasil:", solusi)
+	return solusi, nil
 }
 func scrape(str string) map[string]string {
 	MapArt := make(map[string]string)
