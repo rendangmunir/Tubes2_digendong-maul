@@ -170,22 +170,26 @@ input{
   min-width: 220px;
 }
 
-.result-box ul li{
+.result-box ul a{
+  list-style: none;
+  text-decoration: none;
+  color: #262a2f;
+  border-radius: 3px;
+  padding: 0;
+  cursor: pointer;
+}
+.result-box ul a li{
   list-style: none;
   border-radius: 3px;
   border: 1px solid #999;
   padding: 15px 10px;
   cursor: pointer;
 }
-.result-box ul li a{
-  list-style: none;
-  text-decoration: none;
-  color: #262a2f;
-  border-radius: 3px;
-  padding: 15px 10px;
-  cursor: pointer;
-}
 
 .result-box ul li:hover{
   background:rgb(131, 140, 175) ;
+}
+
+img{
+  margin: 20px 20px 30px;
 }

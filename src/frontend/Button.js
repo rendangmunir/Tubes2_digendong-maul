@@ -2,18 +2,17 @@ const idsButton = document.getElementById('ids-button');
 const bfsButton = document.getElementById('bfs-button');
 const sourceInput = document.getElementById('sourceLink');
 const destInput = document.getElementById('destLink');
-document.addEventListener('click', function(event) {
-  event.preventDefault();
-});
 
-document.addEventListener('submit', function(event) {
-  event.preventDefault();
-});
 function titleToUrl(title) {
   // Encode the title for use in a URL
   const baseUrl = 'https://en.wikipedia.org/wiki/';
   const sanitizedPageTitle = title.replace(/ /g, '_');
   return `${baseUrl}${encodeURIComponent(sanitizedPageTitle)}`;
+}
+
+function urltostring(title){
+  const stringTitle = title.replace(/_/g, ' ');
+  return stringTitle;
 }
 
 
@@ -34,17 +33,17 @@ function updateResults(data, mode, time) {
     data.forEach(result => {
       const a = document.createElement('a');
       const li = document.createElement('li');
-      a.textContent = result;
+      const stringResult = urltostring(result);
+      li.textContent = stringResult;
       a.href = titleToUrl(result);
       a.target = "_blank";
-      li.appendChild(a);
-      ul.appendChild(li);
+      a.appendChild(li);
+      ul.appendChild(a);
     });
   result.appendChild(ul);
 };
 
-idsButton.addEventListener('click', function(event){
-  event.preventDefault();
+idsButton.addEventListener('click', () =>{
   const result = document.getElementById('result');
   result.innerHTML = '';
   const loadingGif = document.createElement('img');
@@ -80,8 +79,7 @@ idsButton.addEventListener('click', function(event){
   console.log(destInput.value);
 });
 
-bfsButton.addEventListener('click', function(event){
-  event.preventDefault();
+bfsButton.addEventListener('click', () => {
   const result = document.getElementById('result');
   result.innerHTML = '';
   const loadingGif = document.createElement('img');

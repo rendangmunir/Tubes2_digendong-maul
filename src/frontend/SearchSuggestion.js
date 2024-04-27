@@ -12,6 +12,8 @@ function searchWikipedia(query) {
 
 
 
+
+
 function displayResults(results) {
   var resultsDiv = document.getElementById("results");
   resultsDiv.innerHTML = "<h2>Search Results</h2><ul>";
