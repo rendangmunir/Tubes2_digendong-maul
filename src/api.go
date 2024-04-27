@@ -75,12 +75,7 @@ func suggestionHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(titles)
 }
 
-//Dummy function, bakal diganti sama import dari file lain
-func IDSSearch(source string,dest string) ([]string, error){
-	dummyArray := []string{source, dest}
-	
-  return dummyArray, nil
-}
+
 
 func sanitizeTitle(title string) string{
 	sanitizedTitle := strings.ReplaceAll(title, " ", "_")

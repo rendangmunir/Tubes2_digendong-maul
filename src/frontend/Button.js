@@ -15,6 +15,12 @@ function urltostring(title){
   return stringTitle;
 }
 
+function UrltoTitle(url) {
+  // Match the title after the last '/'
+  const match = url.match(/\/([^/]+)\/?$/);
+  const title = match[1].replace(/_/g, ' ');
+  return title;
+}
 
 function ErrorMsg() {
   const result = document.getElementById('result');
@@ -33,9 +39,16 @@ function updateResults(data, mode, time) {
     data.forEach(result => {
       const a = document.createElement('a');
       const li = document.createElement('li');
-      const stringResult = urltostring(result);
-      li.textContent = stringResult;
-      a.href = titleToUrl(result);
+      if(mode =="BFS"){
+        const stringResult = urltostring(result);
+        li.textContent = stringResult;
+        a.href = titleToUrl(result);
+      }else{
+        console.log(result);
+        const stringResult = UrltoTitle(result);
+        li.textContent = stringResult;
+        a.href = result;
+      }
       a.target = "_blank";
       a.appendChild(li);
       ul.appendChild(a);
@@ -62,6 +75,8 @@ idsButton.addEventListener('click', () =>{
     console.log(data);
     const endTime = performance.now();
     const processingTime = Math.round(endTime-start);
+
+    // console.log(title);
     updateResults(data, "IDS", processingTime);
   })
   .catch( error =>{
