@@ -67,6 +67,9 @@ func IDS(target string, current string, unique *map[string]bool, jumlahArtikel *
 	for i := 0; i <= maxDepth; i++ {
 
 		check, arr := DLS(target, current, i, unique, jumlahArtikel, prevPath)
+		for i2, j := 0, len(arr)-1; i2 < j; i2, j = i2+1, j-1 {
+			arr[i2], arr[j] = arr[j], arr[i2]
+		}
 
 		// fmt.Println("iterasi", i, "path", arr)
 
@@ -127,7 +130,7 @@ func DLS(target string, current string, limit int, unique *map[string]bool, juml
 
 func main() {
 	// URL awal dan akhir
-	url := "https://en.wikipedia.org/wiki/Hollywood%2C_Los_Angeles"
+	url := "https://en.wikipedia.org/wiki/Joko_Widodo"
 	target := "https://en.wikipedia.org/wiki/Indonesia"
 
 	// var childLinks []string = getLinks(url)
