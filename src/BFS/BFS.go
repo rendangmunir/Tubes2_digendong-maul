@@ -11,11 +11,8 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
+
 func Main() {
-	var artAwal, artDest, temp1, temp2 string
-	var solusi [9]string
-	ter, i, j, k := 0, 0, 0, 0
-func main() {
 	var awal, akhir string
 	var solve []string
 	var err error

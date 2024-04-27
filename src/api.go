@@ -6,6 +6,7 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"strings"
 	"fmt"
 	"main/BFS"
 	"net/http"
@@ -81,17 +82,22 @@ func IDSSearch(source string,dest string) ([]string, error){
 }
 
 //Dummy function, bakal diganti sama import dari file lain
-func BFSSearch(source string,dest string) ([]string, error){
-	dummyArray := []string{source, dest}
+// func BFSSearch(source string,dest string) ([]string, error){
+// 	dummyArray := []string{source, dest}
 
-  return dummyArray, nil
+//   return dummyArray, nil
+// }
+func sanitizeTitle(title string) string{
+	sanitizedTitle := strings.ReplaceAll(title, " ", "_")
+	return sanitizedTitle
 }
 
 func searchHandler(w http.ResponseWriter, r *http.Request) {
 	enableCors(&w)
 	mode := r.URL.Query().Get("mode")
-	sourceLink := r.URL.Query().Get("source")
-	destLink := r.URL.Query().Get("dest")
+	sourceLink := sanitizeTitle(r.URL.Query().Get("source"))
+	destLink := sanitizeTitle(r.URL.Query().Get("dest"))
+
 	fmt.Println(sourceLink)
 	fmt.Println(destLink)
 	fmt.Println(mode)
@@ -101,13 +107,14 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 	if mode == "IDS" {
 			titles, err = IDSSearch(sourceLink, destLink)
 	} else {
-			titles, err = BFSSearch(sourceLink, destLink)
+			titles, err = BFS.BFS(sourceLink, destLink)
 	}
 
 	if err != nil {
 			http.Error(w, "Failed to search Wikipedia", http.StatusInternalServerError)
 			return
 	}
+	fmt.Println(titles)
 
 	json.NewEncoder(w).Encode(titles)
 
@@ -118,7 +125,6 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	//Testing fungsi dari BFS
-	// BFS.Main()
 	http.HandleFunc("/suggest", suggestionHandler)
 	http.HandleFunc("/search", searchHandler)
 	fmt.Println("Server running on port 8080")
