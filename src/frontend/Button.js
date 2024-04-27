@@ -50,8 +50,8 @@ idsButton.addEventListener('click', () =>{
   loadingGif.src = "public/loading-azurlane.gif";
   result.appendChild(loadingGif);
 
-  const SourceLink = sourceInput.value;
-  const DestLink = destInput.value;
+  const SourceLink = titleToUrl(sourceInput.value);
+  const DestLink = titleToUrl(destInput.value);
   bfsButton.setAttribute('disabled', 'disabled');
   idsButton.setAttribute('disabled', 'disabled');
   const start = performance.now();

@@ -9,6 +9,7 @@ import (
 	"strings"
 	"fmt"
 	"main/BFS"
+	"main/IDS"
 	"net/http"
 	"net/url"
 )
@@ -81,12 +82,6 @@ func IDSSearch(source string,dest string) ([]string, error){
   return dummyArray, nil
 }
 
-//Dummy function, bakal diganti sama import dari file lain
-// func BFSSearch(source string,dest string) ([]string, error){
-// 	dummyArray := []string{source, dest}
-
-//   return dummyArray, nil
-// }
 func sanitizeTitle(title string) string{
 	sanitizedTitle := strings.ReplaceAll(title, " ", "_")
 	return sanitizedTitle
@@ -103,9 +98,14 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(mode)
 	var titles []string
 	var err error
+	var found bool
+	fmt.Println(found)
 
 	if mode == "IDS" {
-			titles, err = IDSSearch(sourceLink, destLink)
+			linkMap := make(map[string]bool)
+			var jumlahArtikel uint64 = 0 // kembangin lagi
+			pathContainer := make([]string, 0, 10)
+			found, titles = IDS.IDS(sourceLink, destLink, &linkMap, &jumlahArtikel,4, pathContainer)
 	} else {
 			titles, err = BFS.BFS(sourceLink, destLink)
 	}
