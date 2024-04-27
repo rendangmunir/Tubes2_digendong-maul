@@ -12,11 +12,6 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-// fungsi untuk copy slice
-func copySlice(slice1 *[]string, slice2 *[]string) {
-
-}
-
 // fungsi untuk menghapus duplikat dari slice
 func removeDuplicate(arr *[]string) {
 	seen := make(map[string]bool)
@@ -68,26 +63,48 @@ func getLinks(aLink string) []string {
 // bool karena ada pengecekan
 // ptr ke jumlahArtikel karena akan ngeupdate tiap iterasi
 
-func IDS(target string, current string, jumlahArtikel *uint64, maxDepth int) bool {
+func IDS(target string, current string, unique *map[string]bool, jumlahArtikel *uint64, maxDepth int, prevPath []string) (bool, []string) {
 	for i := 0; i <= maxDepth; i++ {
-		if DLS(target, current, i, jumlahArtikel) {
-			return true
+
+		check, arr := DLS(target, current, i, unique, jumlahArtikel, prevPath)
+
+		// fmt.Println("iterasi", i, "path", arr)
+
+		if check {
+			return true, arr
 		}
 	}
 
-	return false
+	empty := make([]string, 0)
+	return false, empty
 }
 
-func DLS(target string, current string, limit int, jumlahArtikel *uint64) bool {
+func DLS(target string, current string, limit int, unique *map[string]bool, jumlahArtikel *uint64, prevPath []string) (bool, []string) {
+
+	// cek apakah link sudah pernah dijumpai
+	if !(*unique)[current] {
+		(*unique)[current] = true
+	}
+	// copy slice awal, masukkan current
+	tempArr := make([]string, len(prevPath), len(prevPath))
+	copy(tempArr, prevPath)
+	tempArr = append(tempArr, current)
+
+	// fmt.Println("prev:", prevPath)
+
+	// fmt.Println("arr:", tempArr)
+
+	// fmt.Println("temp:", tempArr, "current", current)
 
 	// url akhir ditemukan
 	if target == current {
-		return true
+		return true, tempArr
 	}
 
 	// limitnya sudah maksimal. berhenti
 	if limit <= 0 {
-		return false
+		clear(tempArr)
+		return false, tempArr
 	}
 
 	// belum ditemukan, tapi belum mencapai limit
@@ -95,12 +112,16 @@ func DLS(target string, current string, limit int, jumlahArtikel *uint64) bool {
 	// cek untuk setiap elemen array tersebut
 	children := getLinks(current)
 	for _, element := range children {
-		if DLS(target, element, limit-1, jumlahArtikel) == true {
-			return true
+
+		check, arr := DLS(target, element, limit-1, unique, jumlahArtikel, tempArr)
+
+		if check {
+			return true, arr
 		}
 	}
 
-	return false
+	empty := make([]string, 0)
+	return false, empty
 
 }
 
@@ -109,30 +130,39 @@ func main() {
 	url := "https://en.wikipedia.org/wiki/Hollywood%2C_Los_Angeles"
 	target := "https://en.wikipedia.org/wiki/Indonesia"
 
-	var childLinks []string = getLinks(url)
-	for _, element := range childLinks {
-		fmt.Println(element)
-	}
-	fmt.Println(len(childLinks))
+	// var childLinks []string = getLinks(url)
+	// for _, element := range childLinks {
+	// 	fmt.Println(element)
+	// }
+	// fmt.Println(len(childLinks))
+
+	// boolean found
+	var destFound bool = false
 
 	// jumlah artikel
+	linkMap := make(map[string]bool)
 	var jumlahArtikel uint64 = 0 // kembangin lagi
 
 	// panjang path
 	var panjangPath int = 0
 
 	// container path dari link awal sampai link akhir
-	path := make([]string, 0)
-	path = append(path, url)
+	path := make([]string, 0, 10)
 
 	// mulai timer
 	timerStart := time.Now()
 
 	for i := 0; i <= 6; i++ {
-		if IDS(target, url, &jumlahArtikel, i) == true {
-			fmt.Println("found")
+		pathContainer := make([]string, 0, 10)
+		check, array := IDS(target, url, &linkMap, &jumlahArtikel, i, pathContainer)
+
+		// fmt.Println("array:", i, array)
+
+		if check {
+			destFound = true
 			panjangPath = i
-			fmt.Println("panjang path:", panjangPath)
+			path = make([]string, len(array))
+			copy(path, array)
 			break
 		}
 	}
@@ -140,5 +170,17 @@ func main() {
 	timerStop := time.Now()
 	programDuration := timerStop.Sub(timerStart)
 
-	fmt.Println("durasi algoritma IDS:", programDuration.Milliseconds(), "milisekon")
+	if destFound {
+		fmt.Println("found")
+		fmt.Println("panjang path:", panjangPath)
+		fmt.Println("jalur:")
+		for _, element := range path {
+			fmt.Println(element)
+		}
+		fmt.Println("durasi algoritma IDS:", programDuration.Milliseconds(), "ms")
+		fmt.Println("jumlah artikel:", len(linkMap))
+	} else { // !destFound
+		fmt.Println("not found")
+	}
+
 }
