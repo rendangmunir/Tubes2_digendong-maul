@@ -1,4 +1,4 @@
-package BFS;
+package BFS
 
 import (
 	"fmt"
@@ -10,7 +10,6 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 )
-
 
 func Main() {
 	var awal, akhir string
@@ -104,6 +103,7 @@ func BFS(artAwal string, artDest string) ([]string, error) {
 	elapsed := time.Since(start)
 	fmt.Println("Elapsed time:", elapsed)
 	fmt.Println("Hasil:", solusi)
+	reverseList(solusi)
 	return solusi, nil
 }
 func scrape(str string) map[string]string {
@@ -153,5 +153,12 @@ func scrape(str string) map[string]string {
 func CopyMap(map1 map[string]string, map2 map[string]string) {
 	for key, value := range map1 {
 		map2[key] = value
+	}
+}
+
+func reverseList(listStr []string) {
+	n := len(listStr)
+	for i := 0; i < n/2; i++ {
+		listStr[i], listStr[n-i-1] = listStr[n-i-1], listStr[i]
 	}
 }
