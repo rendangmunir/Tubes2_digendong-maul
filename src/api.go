@@ -1,4 +1,5 @@
 package main
+
 //TODO
 //-Import BFS.go
 //-Import IDS.go
@@ -6,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"main/BFS"
 	"net/http"
 	"net/url"
 )
@@ -70,6 +72,7 @@ func suggestionHandler(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(titles)
 }
+
 //Dummy function, bakal diganti sama import dari file lain
 func IDSSearch(source string,dest string) ([]string, error){
 	dummyArray := []string{source, dest}
@@ -114,6 +117,8 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 
 
 func main() {
+	//Testing fungsi dari BFS
+	// BFS.Main()
 	http.HandleFunc("/suggest", suggestionHandler)
 	http.HandleFunc("/search", searchHandler)
 	fmt.Println("Server running on port 8080")

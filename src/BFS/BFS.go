@@ -1,4 +1,4 @@
-package main
+package BFS;
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-func main() {
+func Main() {
 	var artAwal, artDest, temp1, temp2 string
 	var solusi [9]string
 	ter, i, j, k := 0, 0, 0, 0
@@ -72,7 +72,7 @@ func main() {
 
 		}
 		fmt.Printf("%d,%d,%d \n", i, j, k)
-		copyMap(MapArt2, MapArt)
+		CopyMap(MapArt2, MapArt)
 		k++
 		if k > 8 {
 			break
@@ -137,7 +137,7 @@ func scrape(str string) map[string]string {
 	return MapArt
 }
 
-func copyMap(map1 map[string]string, map2 map[string]string) {
+func CopyMap(map1 map[string]string, map2 map[string]string) {
 	for key, value := range map1 {
 		map2[key] = value
 	}
