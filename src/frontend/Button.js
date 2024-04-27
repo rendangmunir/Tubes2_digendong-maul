@@ -30,6 +30,12 @@ function updateResults(data, mode, time) {
 };
 
 idsButton.addEventListener('click', () =>{
+  const result = document.getElementById('result');
+  result.innerHTML = '';
+  const loadingGif = document.createElement('img');
+  loadingGif.src = "public/loading-azurlane.gif";
+  result.appendChild(loadingGif);
+
   const SourceLink = sourceInput.value;
   const DestLink = destInput.value;
   bfsButton.setAttribute('disabled', 'disabled');
@@ -60,6 +66,12 @@ idsButton.addEventListener('click', () =>{
 });
 
 bfsButton.addEventListener('click', () =>{
+  const result = document.getElementById('result');
+  result.innerHTML = '';
+  const loadingGif = document.createElement('img');
+  loadingGif.src = "public/loading-azurlane.gif";
+  result.appendChild(loadingGif);
+  
   const SourceLink = sourceInput.value;
   const DestLink = destInput.value;
   bfsButton.setAttribute('disabled', 'disabled');
